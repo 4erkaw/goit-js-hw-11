@@ -1,5 +1,5 @@
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import { fetchImages } from './components/get-images';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import BtnService from './components/interactive-btn';
@@ -30,57 +30,60 @@ async function searchPictures(e) {
   }
 
   resetPage();
+  btn.disable();
   try {
     const res = await fetchImages(inputValue, page);
     clearPage();
     btn.show();
-    btn.disable();
+
     renderGallery(res.hits);
+    lightbox.refresh();
     btn.enable();
     Notify.success('Hooray! We found totalHits images.');
   } catch (error) {
     Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-    clearPage()
-    btn.hide()
+    clearPage();
+    btn.hide();
   }
 }
 
 function renderGallery(arr) {
   const markup = arr
-    .map(({ webformatURL, tags, likes, views, comments, downloads }) => {
-      return `<div class="img-card">
-      <a class="img-href" href="${webformatURL}">
+    .map(({largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => {
+      return `
+      <a class="img-href" href="${largeImageURL}">
       <img src="${webformatURL}" alt="${tags}" loading="load">
       </a>
       <div class='img-info'>
       <p class='info-item'>
-      <b>Likes ${likes}
+      Likes ${likes}
       </p>
       <p class='info-item'>
-      <b>Views ${views}
+      Views ${views}
       </p>
       <p class='info-item'>
-      <b>Comments ${comments}
+      Comments ${comments}
       </p>
       <p class='info-item'>
-      <b>Downloads ${downloads}
-      </p>
-      </div>
+      Downloads ${downloads}
+      </p>    
       </div>`;
     })
     .join('');
 
+  console.log(markup);
+
   refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
-
 
 btn.refs.button.addEventListener('click', loadMoreImg);
 
 async function loadMoreImg() {
   page += 1;
   btn.disable();
-  const response = await fetchImages(inputValue, page);
   try {
+    const response = await fetchImages(inputValue, page);
+
     renderGallery(response.hits);
     btn.enable();
     Notify.success('Hooray! We found totalHits images.');
@@ -97,14 +100,11 @@ function resetPage() {
   page = 1;
 }
 
+// refs.gallery.addEventListener('click', onGalleryElemClick);
 
-
-// refs.gallery.addEventListener('click', onGalleryElemClick)
-
-// let lightbox = new SimpleLightbox('.gallery a', {captionsData: "alt", captionDelay: 250});
+let lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
 
 // function onGalleryElemClick(e) {
-//     e.preventDefault();
-//     console.log("f")
+//   e.preventDefault();
+//   console.log('f');
 // }
-
