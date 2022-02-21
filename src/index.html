@@ -13,15 +13,32 @@
     />
   </head>
   <body>
-    <form class="search-form" id="search-form">
-      <input type="text" name="searchQuery" autocomplete="off" placeholder="Search images..." />
-      <button type="submit">Search</button>
-    </form>
-    <div class="gallery"></div>
-    <button type="button" class="load-more is-hidden">
+    <header class="header">
+      <div class="container form">
+        <form class="search-form" id="search-form">
+          <div class="text-field__icon text-field__icon_search">
+            <input
+              class="text-field__input"
+              type="text"
+              name="searchQuery"
+              autocomplete="off"
+              placeholder="Search images..."
+            />
+            <div class="box-3">
+              <div class="btn btn-three"><button class="btn-sub" type="submit">Search</button></div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </header>
+    <div class="empty-place"></div>
+    <div class="gallery container"></div>
+    <div class="load-more-place">
+    <button class="btn-sub load-more is-hidden" type="button" >
       <span class="spinner-grow is-hidden" role="status" aria-hidden="true"></span
-      ><span class="label">Load more</span>
+      ><span class="label">LOAD MORE</span>
     </button>
+  </div>
     <script src="./index.js"></script>
   </body>
 </html>

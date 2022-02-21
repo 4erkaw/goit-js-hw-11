@@ -8,7 +8,7 @@ const refs = {
   searchForm: document.querySelector('#search-form'),
   searchInput: document.querySelector('input[name="searchQuery"]'),
   gallery: document.querySelector('.gallery'),
-  //   loadMoreBtn: document.querySelector('.load-more'),
+  btnAnim: document.querySelector('.load-more-place')
 };
 
 const btn = new BtnService({ selector: '.load-more', hidden: true });
@@ -19,6 +19,7 @@ let inputValue = '';
 let page = 1;
 
 async function searchPictures(e) {
+  console.log('f');
   e.preventDefault();
 
   inputValue = refs.searchInput.value.trim();
@@ -39,6 +40,7 @@ async function searchPictures(e) {
     renderGallery(res.hits);
     lightbox.refresh();
     btn.enable();
+    animateBtn()
     Notify.success('Hooray! We found totalHits images.');
   } catch (error) {
     Notify.failure('Sorry, there are no images matching your search query. Please try again.');
@@ -49,24 +51,22 @@ async function searchPictures(e) {
 
 function renderGallery(arr) {
   const markup = arr
-    .map(({largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => {
+    .map(({ largeImageURL, webformatURL, tags, likes, views, comments, downloads }) => {
       return `
+      <div class="data-container">
       <a class="img-href" href="${largeImageURL}">
-      <img src="${webformatURL}" alt="${tags}" loading="load">
+      <img class="img" src="${webformatURL}" alt="${tags}" loading="load">
       </a>
       <div class='img-info'>
-      <p class='info-item'>
-      Likes ${likes}
-      </p>
-      <p class='info-item'>
-      Views ${views}
-      </p>
-      <p class='info-item'>
-      Comments ${comments}
-      </p>
-      <p class='info-item'>
-      Downloads ${downloads}
-      </p>    
+      <div class="left-side">
+      <p class='info-item'> Likes:  ${likes}</p>
+      <p class='info-item'> Views:  ${views}</p>
+      </div>
+      <div class="right-side">
+      <p class='info-item'>Comments:  ${comments}</p> 
+      <p class='info-item'>Downloads:  ${downloads}</p>
+      </div>    
+      </div>
       </div>`;
     })
     .join('');
@@ -100,11 +100,9 @@ function resetPage() {
   page = 1;
 }
 
-// refs.gallery.addEventListener('click', onGalleryElemClick);
-
 let lightbox = new SimpleLightbox('.gallery a', { captionsData: 'alt', captionDelay: 250 });
 
-// function onGalleryElemClick(e) {
-//   e.preventDefault();
-//   console.log('f');
-// }
+function animateBtn(){
+  refs.btnAnim.classList.toggle('btn-three')
+  refs.btnAnim.classList.toggle('btn')
+}
