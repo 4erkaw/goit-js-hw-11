@@ -19,7 +19,6 @@ let inputValue = '';
 let page = 1;
 
 async function searchPictures(e) {
-  console.log('f');
   e.preventDefault();
 
   inputValue = refs.searchInput.value.trim();
